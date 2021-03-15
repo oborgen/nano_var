@@ -66,5 +66,8 @@ jobs:
         #run: melos exec "dart test"
         run: melos exec "flutter test --coverage"
 
+      - name: Check if set
+        run: if [ -z ${CODECOV_TOKEN+x} ]; then echo "CODECOV_TOKEN is unset"; else echo "CODECOV_TOKEN is set"; fi
+
       - name: Publish coverage
         run: bash <(curl -s https://codecov.io/bash)
