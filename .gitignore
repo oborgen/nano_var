@@ -1,0 +1,5 @@
+.dart_tool
+build
+*.mocks.dart
+.packages
+pubspec.lock
