@@ -67,7 +67,11 @@ jobs:
         run: melos exec "flutter test --coverage"
 
       - name: Check if set
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: if [ -z ${CODECOV_TOKEN+x} ]; then echo "CODECOV_TOKEN is unset"; else echo "CODECOV_TOKEN is set"; fi
 
       - name: Publish coverage
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: bash <(curl -s https://codecov.io/bash)
