@@ -31,6 +31,10 @@ jobs:
         with:
           flutter-version: '2.0.2'
 
+      # Disable Flutter analytics.
+      - name: Disable Flutter analytics
+        run: flutter config --no-analytics
+
       # Install melos to operate on multiple packages.
       - name: Intall Melos
         run: dart pub global activate melos
