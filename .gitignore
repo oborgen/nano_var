@@ -1,5 +1,10 @@
+# Dart
 .dart_tool
 build
 *.mocks.dart
 .packages
 pubspec.lock
+
+# Intellij IDEA
+*.iml
+.idea
