@@ -80,6 +80,12 @@ void main() {
         // Subscribe to the nanoRead.
         nanoRead._subscribe(fakeSubscriber.onChange);
 
+        // Validate that the number of subscribers is one.
+        expect(
+          nanoRead.subscribersCount,
+          equals(1),
+        );
+
         // Verify onChange has not been called.
         verifyNever(fakeSubscriber.onChange(oldValue, newValue));
 
@@ -106,6 +112,12 @@ void main() {
         // Subscribe to the nanoRead.
         nanoRead._subscribe(fakeSubscriber.onChange);
 
+        // Validate that the number of subscribers is one.
+        expect(
+          nanoRead.subscribersCount,
+          equals(1),
+        );
+
         // Call _change to trigger a change.
         nanoRead._change(value);
       });
@@ -129,11 +141,23 @@ void main() {
         // Subscribe to the nanoRead.
         final unsubscribe = nanoRead._subscribe(fakeSubscriber.onChange);
 
+        // Validate that the number of subscribers is one.
+        expect(
+          nanoRead.subscribersCount,
+          equals(1),
+        );
+
         // Call _change to trigger a change.
         nanoRead._change(newValue1);
 
         // Call unsubscribe.
         unsubscribe();
+
+        // Validate that the number of subscribers is zero.
+        expect(
+          nanoRead.subscribersCount,
+          equals(0),
+        );
 
         // Call _change to trigger another change.
         nanoRead._change(newValue2);
@@ -159,6 +183,12 @@ void main() {
         // Subscribe to the nanoRead.
         nanoRead._subscribe(fakeSubscriber1.onChange);
         nanoRead._subscribe(fakeSubscriber2.onChange);
+
+        // Validate that the number of subscribers is two.
+        expect(
+          nanoRead.subscribersCount,
+          equals(2),
+        );
 
         // Verify onChange has not been called on both mocks.
         verifyNever(fakeSubscriber1.onChange(oldValue, newValue));
@@ -195,6 +225,12 @@ void main() {
         nanoRead._subscribe(fakeSubscriber1.onChange);
         final unsubscribe = nanoRead._subscribe(fakeSubscriber2.onChange);
 
+        // Validate that the number of subscribers is two.
+        expect(
+          nanoRead.subscribersCount,
+          equals(2),
+        );
+
         // Verify onChange has not been called on both mocks.
         verifyNever(fakeSubscriber1.onChange(oldValue, newValue1));
         verifyNever(fakeSubscriber2.onChange(oldValue, newValue1));
@@ -210,6 +246,12 @@ void main() {
 
         // Call unsubscribe to unsubscribe the second mock.
         unsubscribe();
+
+        // Validate that the number of subscribers is one.
+        expect(
+          nanoRead.subscribersCount,
+          equals(1),
+        );
 
         // Call _change to trigger another change.
         nanoRead._change(newValue2);
