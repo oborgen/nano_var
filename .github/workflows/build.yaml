@@ -37,7 +37,7 @@ jobs:
 
       # Add ~/.pub-cache/bin to path to make melos work.
       - name: Pub cache path
-        run: export PATH="$PATH":"$HOME/.pub-cache/bin"
+        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
 
       # Install dependencies by calling "melos bootstrap".
       - name: Install dependencies
