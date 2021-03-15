@@ -35,6 +35,10 @@ jobs:
       - name: Intall Melos
         run: dart pub global activate melos
 
+      # Add ~/.pub-cache/bin to path to make melos work.
+      - name: Pub cache path
+        run: export PATH="$PATH":"$HOME/.pub-cache/bin"
+
       # Install dependencies by calling "melos bootstrap".
       - name: Install dependencies
         run: melos bootstrap
