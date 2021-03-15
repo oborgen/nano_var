@@ -22,11 +22,13 @@ jobs:
       # You can specify other versions if desired, see documentation here:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
       # - uses: dart-lang/setup-dart@v1
-      #- uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
 
+      # Install Java
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+      
+      # Install Flutter
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.0.2'
@@ -63,14 +65,9 @@ jobs:
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
       - name: Run tests
-        #run: melos exec "dart test"
         run: melos exec "flutter test --coverage"
 
-      - name: Check if set
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: if [ -z ${CODECOV_TOKEN+x} ]; then echo "CODECOV_TOKEN is unset"; else echo "CODECOV_TOKEN is set"; fi
-
+      # Publish coverage information to codecov.io.
       - name: Publish coverage
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
