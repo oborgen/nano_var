@@ -14,6 +14,10 @@ class _NanoRead extends NanoRead<int> {
   void _change(int newValue) {
     change(newValue);
   }
+
+  void Function() _subscribe(void Function(int, int) callback) {
+    return subscribe((oldValue, newValue) => callback(oldValue, newValue));
+  }
 }
 
 @GenerateMocks([
@@ -74,7 +78,7 @@ void main() {
         when(fakeSubscriber.onChange(oldValue, newValue)).thenAnswer((_) {});
 
         // Subscribe to the nanoRead.
-        nanoRead.subscribe(fakeSubscriber.onChange);
+        nanoRead._subscribe(fakeSubscriber.onChange);
 
         // Verify onChange has not been called.
         verifyNever(fakeSubscriber.onChange(oldValue, newValue));
@@ -100,7 +104,7 @@ void main() {
         final fakeSubscriber = MockFakeSubscriber();
 
         // Subscribe to the nanoRead.
-        nanoRead.subscribe(fakeSubscriber.onChange);
+        nanoRead._subscribe(fakeSubscriber.onChange);
 
         // Call _change to trigger a change.
         nanoRead._change(value);
@@ -123,7 +127,7 @@ void main() {
         when(fakeSubscriber.onChange(oldValue, newValue1)).thenAnswer((_) {});
 
         // Subscribe to the nanoRead.
-        final unsubscribe = nanoRead.subscribe(fakeSubscriber.onChange);
+        final unsubscribe = nanoRead._subscribe(fakeSubscriber.onChange);
 
         // Call _change to trigger a change.
         nanoRead._change(newValue1);
@@ -153,8 +157,8 @@ void main() {
         when(fakeSubscriber2.onChange(oldValue, newValue)).thenAnswer((_) {});
 
         // Subscribe to the nanoRead.
-        nanoRead.subscribe(fakeSubscriber1.onChange);
-        nanoRead.subscribe(fakeSubscriber2.onChange);
+        nanoRead._subscribe(fakeSubscriber1.onChange);
+        nanoRead._subscribe(fakeSubscriber2.onChange);
 
         // Verify onChange has not been called on both mocks.
         verifyNever(fakeSubscriber1.onChange(oldValue, newValue));
@@ -188,8 +192,8 @@ void main() {
         when(fakeSubscriber1.onChange(newValue1, newValue2)).thenAnswer((_) {});
 
         // Subscribe to the nanoRead.
-        nanoRead.subscribe(fakeSubscriber1.onChange);
-        final unsubscribe = nanoRead.subscribe(fakeSubscriber2.onChange);
+        nanoRead._subscribe(fakeSubscriber1.onChange);
+        final unsubscribe = nanoRead._subscribe(fakeSubscriber2.onChange);
 
         // Verify onChange has not been called on both mocks.
         verifyNever(fakeSubscriber1.onChange(oldValue, newValue1));

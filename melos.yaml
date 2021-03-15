@@ -1,0 +1,4 @@
+name: nano_var
+
+packages:
+  - packages/**
