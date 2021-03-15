@@ -65,3 +65,6 @@ jobs:
       - name: Run tests
         #run: melos exec "dart test"
         run: melos exec "flutter test --coverage"
+
+      - name: Publish coverage
+        run: bash <(curl -s https://codecov.io/bash)
