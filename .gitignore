@@ -4,7 +4,11 @@ build
 *.mocks.dart
 .packages
 pubspec.lock
+coverage
 
 # Intellij IDEA
 *.iml
 .idea
+
+# macOS
+.DS_Store
