@@ -1,12 +1,8 @@
 import 'dart:math';
 
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:nano_mock/nano_mock.dart';
 import 'package:nano_var/nano_var.dart';
 import 'package:test/test.dart';
-
-import 'nano_read_test.mocks.dart';
-import 'fakes/fake_subscriber.dart';
 
 class _NanoRead extends NanoRead<int> {
   _NanoRead(int initialValue) : super(initialValue);
@@ -15,14 +11,11 @@ class _NanoRead extends NanoRead<int> {
     change(newValue);
   }
 
-  void Function() _subscribe(void Function(int, int) callback) {
-    return subscribe((oldValue, newValue) => callback(oldValue, newValue));
+  void Function() _subscribe(NanoMock<void> callback) {
+    return subscribe((oldValue, newValue) => callback([oldValue, newValue]));
   }
 }
 
-@GenerateMocks([
-  FakeSubscriber,
-])
 void main() {
   group("NanoRead", () {
     group("get value", () {
@@ -72,13 +65,13 @@ void main() {
         final nanoRead = _NanoRead(oldValue);
 
         // Create a mock.
-        final fakeSubscriber = MockFakeSubscriber();
+        final fakeSubscriber = NanoMock<void>();
 
         // Set up the mock to accept the generated random values.
-        when(fakeSubscriber.onChange(oldValue, newValue)).thenAnswer((_) {});
+        final verify = fakeSubscriber.whenVoid([oldValue, newValue]);
 
         // Subscribe to the nanoRead.
-        nanoRead._subscribe(fakeSubscriber.onChange);
+        nanoRead._subscribe(fakeSubscriber);
 
         // Validate that the number of subscribers is one.
         expect(
@@ -86,14 +79,14 @@ void main() {
           equals(1),
         );
 
-        // Verify onChange has not been called.
-        verifyNever(fakeSubscriber.onChange(oldValue, newValue));
+        // Verify fakeSubscriber has not been called.
+        verify.neverCalled();
 
         // Call _change to trigger a change.
         nanoRead._change(newValue);
 
-        // Verify onChange has been called.
-        verify(fakeSubscriber.onChange(oldValue, newValue)).called(1);
+        // Verify fakeSubscriber has been called once.
+        verify.called(1);
       });
 
       test(
@@ -107,10 +100,10 @@ void main() {
         final nanoRead = _NanoRead(value);
 
         // Create a mock.
-        final fakeSubscriber = MockFakeSubscriber();
+        final fakeSubscriber = NanoMock<void>();
 
         // Subscribe to the nanoRead.
-        nanoRead._subscribe(fakeSubscriber.onChange);
+        nanoRead._subscribe(fakeSubscriber);
 
         // Validate that the number of subscribers is one.
         expect(
@@ -133,13 +126,13 @@ void main() {
         final nanoRead = _NanoRead(oldValue);
 
         // Create a mock.
-        final fakeSubscriber = MockFakeSubscriber();
+        final fakeSubscriber = NanoMock<void>();
 
         // Set up the mock to accept the two first generated random values.
-        when(fakeSubscriber.onChange(oldValue, newValue1)).thenAnswer((_) {});
+        final verify = fakeSubscriber.whenVoid([oldValue, newValue1]);
 
         // Subscribe to the nanoRead.
-        final unsubscribe = nanoRead._subscribe(fakeSubscriber.onChange);
+        final unsubscribe = nanoRead._subscribe(fakeSubscriber);
 
         // Validate that the number of subscribers is one.
         expect(
@@ -149,6 +142,9 @@ void main() {
 
         // Call _change to trigger a change.
         nanoRead._change(newValue1);
+
+        // Verify fakeSubscriber has been called once.
+        verify.called(1);
 
         // Call unsubscribe.
         unsubscribe();
@@ -161,6 +157,9 @@ void main() {
 
         // Call _change to trigger another change.
         nanoRead._change(newValue2);
+
+        // Verify fakeSubscriber still has been called once.
+        verify.called(1);
       });
 
       test("can have two subscriptions", () {
@@ -173,16 +172,16 @@ void main() {
         final nanoRead = _NanoRead(oldValue);
 
         // Create two mocks.
-        final fakeSubscriber1 = MockFakeSubscriber();
-        final fakeSubscriber2 = MockFakeSubscriber();
+        final fakeSubscriber1 = NanoMock<void>();
+        final fakeSubscriber2 = NanoMock<void>();
 
         // Set up the mocks to accept the generated random values.
-        when(fakeSubscriber1.onChange(oldValue, newValue)).thenAnswer((_) {});
-        when(fakeSubscriber2.onChange(oldValue, newValue)).thenAnswer((_) {});
+        final verify1 = fakeSubscriber1.whenVoid([oldValue, newValue]);
+        final verify2 = fakeSubscriber2.whenVoid([oldValue, newValue]);
 
         // Subscribe to the nanoRead.
-        nanoRead._subscribe(fakeSubscriber1.onChange);
-        nanoRead._subscribe(fakeSubscriber2.onChange);
+        nanoRead._subscribe(fakeSubscriber1);
+        nanoRead._subscribe(fakeSubscriber2);
 
         // Validate that the number of subscribers is two.
         expect(
@@ -190,16 +189,16 @@ void main() {
           equals(2),
         );
 
-        // Verify onChange has not been called on both mocks.
-        verifyNever(fakeSubscriber1.onChange(oldValue, newValue));
-        verifyNever(fakeSubscriber2.onChange(oldValue, newValue));
+        // Verify both mocks have not been called.
+        verify1.neverCalled();
+        verify2.neverCalled();
 
         // Call _change to trigger a change.
         nanoRead._change(newValue);
 
-        // Verify onChange has been called on both mocks.
-        verify(fakeSubscriber1.onChange(oldValue, newValue)).called(1);
-        verify(fakeSubscriber2.onChange(oldValue, newValue)).called(1);
+        // Verify both mocks have been called once.
+        verify1.called(1);
+        verify2.called(1);
       });
 
       test("can unsubscribe on one of them", () {
@@ -213,17 +212,17 @@ void main() {
         final nanoRead = _NanoRead(oldValue);
 
         // Create two mocks.
-        final fakeSubscriber1 = MockFakeSubscriber();
-        final fakeSubscriber2 = MockFakeSubscriber();
+        final fakeSubscriber1 = NanoMock<void>();
+        final fakeSubscriber2 = NanoMock<void>();
 
         // Set up the mocks to accept the generated random values.
-        when(fakeSubscriber1.onChange(oldValue, newValue1)).thenAnswer((_) {});
-        when(fakeSubscriber2.onChange(oldValue, newValue1)).thenAnswer((_) {});
-        when(fakeSubscriber1.onChange(newValue1, newValue2)).thenAnswer((_) {});
+        final verify1 = fakeSubscriber1.whenVoid([oldValue, newValue1]);
+        final verify2 = fakeSubscriber2.whenVoid([oldValue, newValue1]);
+        final verify3 = fakeSubscriber1.whenVoid([newValue1, newValue2]);
 
         // Subscribe to the nanoRead.
-        nanoRead._subscribe(fakeSubscriber1.onChange);
-        final unsubscribe = nanoRead._subscribe(fakeSubscriber2.onChange);
+        nanoRead._subscribe(fakeSubscriber1);
+        final unsubscribe = nanoRead._subscribe(fakeSubscriber2);
 
         // Validate that the number of subscribers is two.
         expect(
@@ -231,18 +230,18 @@ void main() {
           equals(2),
         );
 
-        // Verify onChange has not been called on both mocks.
-        verifyNever(fakeSubscriber1.onChange(oldValue, newValue1));
-        verifyNever(fakeSubscriber2.onChange(oldValue, newValue1));
-        verifyNever(fakeSubscriber1.onChange(newValue1, newValue2));
+        // Verify both mocks have not been called.
+        verify1.neverCalled();
+        verify2.neverCalled();
+        verify3.neverCalled();
 
         // Call _change to trigger a change.
         nanoRead._change(newValue1);
 
-        // Verify onChange has been called on both mocks.
-        verify(fakeSubscriber1.onChange(oldValue, newValue1)).called(1);
-        verify(fakeSubscriber2.onChange(oldValue, newValue1)).called(1);
-        verifyNever(fakeSubscriber1.onChange(newValue1, newValue2));
+        // Verify both mocks has been called.
+        verify1.called(1);
+        verify2.called(1);
+        verify3.neverCalled();
 
         // Call unsubscribe to unsubscribe the second mock.
         unsubscribe();
@@ -256,8 +255,8 @@ void main() {
         // Call _change to trigger another change.
         nanoRead._change(newValue2);
 
-        // Verify onChange has been called on the first mock.
-        verify(fakeSubscriber1.onChange(newValue1, newValue2)).called(1);
+        // Verify the first mock has been called.
+        verify3.called(1);
       });
     });
   });

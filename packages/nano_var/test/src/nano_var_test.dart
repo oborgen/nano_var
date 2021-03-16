@@ -1,16 +1,9 @@
 import 'dart:math';
 
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:nano_mock/nano_mock.dart';
 import 'package:nano_var/nano_var.dart';
 import 'package:test/test.dart';
 
-import 'fakes/fake_subscriber.dart';
-import 'nano_var_test.mocks.dart';
-
-@GenerateMocks([
-  FakeSubscriber,
-])
 void main() {
   group("NanoVar", () {
     group("set value", () {
@@ -24,16 +17,18 @@ void main() {
         final nanoVar = NanoVar(oldValue);
 
         // Create a mock.
-        final fakeSubscriber = MockFakeSubscriber();
+        final fakeSubscriber = NanoMock<void>();
 
         // Set up the mock to accept the generated random values.
-        when(fakeSubscriber.onChange(oldValue, newValue)).thenAnswer((_) {});
+        final verify = fakeSubscriber.whenVoid([oldValue, newValue]);
 
         // Subscribe to the readable.
-        nanoVar.subscribe(fakeSubscriber.onChange);
+        nanoVar.subscribe(
+          (oldValue, newValue) => fakeSubscriber([oldValue, newValue]),
+        );
 
         // Verify onChange has not been called.
-        verifyNever(fakeSubscriber.onChange(oldValue, newValue));
+        verify.neverCalled();
 
         // Call _change to trigger a change.
         nanoVar.value = newValue;
@@ -45,7 +40,7 @@ void main() {
         );
 
         // Verify onChange has been called.
-        verify(fakeSubscriber.onChange(oldValue, newValue)).called(1);
+        verify.called(1);
       });
     });
   });
