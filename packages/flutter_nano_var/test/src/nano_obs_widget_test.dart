@@ -8,9 +8,11 @@ import 'utils/test_text.dart';
 
 class _TextObserverWidget extends NanoObsWidget {
   final NanoRead<String> nanoRead;
+  final void Function(T Function<T>(NanoRead<T> nanoRead))? stealWatch;
 
   const _TextObserverWidget({
     required this.nanoRead,
+    this.stealWatch,
   });
 
   @override
@@ -18,6 +20,13 @@ class _TextObserverWidget extends NanoObsWidget {
     BuildContext context,
     T Function<T>(NanoRead<T> nanoRead) watch,
   ) {
+    // Call stealWatch with the watch function if a stealWatch is set.
+    final stealWatch = this.stealWatch;
+    if (stealWatch != null) {
+      stealWatch(watch);
+    }
+
+    // Build a TestText widget.
     return TestText(watch(nanoRead));
   }
 }
@@ -195,6 +204,33 @@ void main() {
       expect(
         find.text(newValue2),
         findsOneWidget,
+      );
+    });
+
+    testWidgets("watch throws an exception if called outside build",
+        (tester) async {
+      // Generate an initial value.
+      final initialValue = "initialValue-" + randomString();
+
+      // Create a Variable with the initial value.
+      final nanoVar = NanoVar(initialValue);
+
+      // Declare a variable and a function used to steal the watch function.
+      late T Function<T>(NanoRead<T> nanoRead) watch;
+      void stealWatch(T Function<T>(NanoRead<T> nanoRead) _watch) {
+        watch = _watch;
+      }
+
+      // Build a _TextObserverWidget with the Variable.
+      await tester.pumpWidget(_TextObserverWidget(
+        nanoRead: nanoVar,
+        stealWatch: stealWatch,
+      ));
+
+      // Call watch an verify that an InvalidWatchCallException is thrown.
+      expect(
+        () => watch(nanoVar),
+        throwsA(isA<InvalidWatchCallException>()),
       );
     });
   });

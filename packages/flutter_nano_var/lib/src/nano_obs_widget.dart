@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_nano_var/flutter_nano_var.dart';
 import 'package:nano_var/nano_var.dart';
 
 /// A widget that can be used to listen to changes to [NanoRead] instances and
@@ -52,11 +53,23 @@ class _NanoObsWidgetState extends State<NanoObsWidget> {
     // Declare a Map of new subscriptions.
     final Map<NanoRead, void Function()> newSubscriptions = {};
 
+    // Declare a boolean to keep track of whether or not build has returned.
+    bool buildReturned = false;
+
     // Call build to build the widget.
     final builtWidget = widget.build(context, <T>(NanoRead<T> nanoRead) {
+      // Check if build already has returned.
+      if (buildReturned) {
+        // Throw an exception if that's the case.
+        throw const InvalidWatchCallException();
+      }
+
       // Call _watchReadable.
       return _watchReadable(nanoRead, reads, newSubscriptions);
     });
+
+    // Set buildReturned to true, since build has returned.
+    buildReturned = true;
 
     // Call _cleanSubscriptions.
     _cleanSubscriptions(reads);
