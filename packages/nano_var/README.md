@@ -37,3 +37,10 @@ Call `unsubscribe` to make the NanoVar instance stop calling the callback:
 ```
 unsubscribe();
 ```
+
+## Motivation
+
+This library was created to be used in
+[Flutter NanoVar](https://pub.dev/packages/flutter_nano_var), which provides a
+lightweight method of state management in Flutter.
+However, NanoVar can be used on its own as well.
