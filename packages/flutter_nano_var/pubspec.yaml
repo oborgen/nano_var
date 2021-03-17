@@ -1,0 +1,17 @@
+name: flutter_nano_var
+
+version: 1.0.0
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=2.0.2 <3.0.0"
+
+dependencies:
+  nano_var: ^1.0.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  uuid: ^3.0.1
