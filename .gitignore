@@ -10,5 +10,8 @@ coverage
 *.iml
 .idea
 
+# Documentation
+doc
+
 # macOS
 .DS_Store
