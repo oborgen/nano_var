@@ -1,0 +1,4 @@
+ignore:
+  # Ignore main.dart in the flutter_nano_var example, since its main method
+  # cannot be run in CI.
+  - "packages/flutter_nano_var/example/lib/main.dart"
