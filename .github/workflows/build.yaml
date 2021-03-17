@@ -39,9 +39,9 @@ jobs:
       - name: Install dependencies
         run: melos bootstrap
 
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
+      # Call dart analyze.
       - name: Analyze project source
-        run: melos exec "dart analyze"
+        run: melos exec "dart analyze --fatal-infos"
 
       # Call flutter test and collect coverage.
       - name: Run tests
