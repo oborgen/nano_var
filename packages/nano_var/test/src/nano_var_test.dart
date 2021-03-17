@@ -1,17 +1,17 @@
-import 'dart:math';
-
 import 'package:nano_mock/nano_mock.dart';
 import 'package:nano_var/nano_var.dart';
 import 'package:test/test.dart';
+
+import 'utils/unique_random.dart';
 
 void main() {
   group("NanoVar", () {
     group("set value", () {
       test("can subscribe and get new values when called", () {
         // Generate random values.
-        final random = Random();
-        final oldValue = random.nextInt(100);
-        final newValue = random.nextInt(100);
+        final random = UniqueRandom();
+        final oldValue = random.next();
+        final newValue = random.next();
 
         // Create a NanoVar.
         final nanoVar = NanoVar(oldValue);

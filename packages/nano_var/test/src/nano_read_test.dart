@@ -1,8 +1,8 @@
-import 'dart:math';
-
 import 'package:nano_mock/nano_mock.dart';
 import 'package:nano_var/nano_var.dart';
 import 'package:test/test.dart';
+
+import 'utils/unique_random.dart';
 
 class _NanoRead extends NanoRead<int> {
   _NanoRead(int initialValue) : super(initialValue);
@@ -21,8 +21,8 @@ void main() {
     group("get value", () {
       test("can get the initial value", () {
         // Generate a random value.
-        final random = Random();
-        final initialValue = random.nextInt(100);
+        final random = UniqueRandom();
+        final initialValue = random.next();
 
         // Create a _NanoRead.
         final nanoRead = _NanoRead(initialValue);
@@ -36,9 +36,9 @@ void main() {
 
       test("is changed when a change is triggered", () {
         // Generate a random value.
-        final random = Random();
-        final oldValue = random.nextInt(100);
-        final newValue = random.nextInt(100);
+        final random = UniqueRandom();
+        final oldValue = random.next();
+        final newValue = random.next();
 
         // Create a _NanoRead.
         final nanoRead = _NanoRead(oldValue);
@@ -57,9 +57,9 @@ void main() {
     group("subscribe", () {
       test("can subscribe and get new values when it's changed", () {
         // Generate random values.
-        final random = Random();
-        final oldValue = random.nextInt(100);
-        final newValue = random.nextInt(100);
+        final random = UniqueRandom();
+        final oldValue = random.next();
+        final newValue = random.next();
 
         // Create a _NanoRead.
         final nanoRead = _NanoRead(oldValue);
@@ -92,9 +92,9 @@ void main() {
       test(
           "doesn't call subscribers when it's changed but the new value is " +
               "equal to the old value", () {
-        // Generate random values.
-        final random = Random();
-        final value = random.nextInt(100);
+        // Generate a random value.
+        final random = UniqueRandom();
+        final value = random.next();
 
         // Create a _NanoRead.
         final nanoRead = _NanoRead(value);
@@ -117,10 +117,10 @@ void main() {
 
       test("can unsubscribe", () {
         // Generate random values.
-        final random = Random();
-        final oldValue = random.nextInt(100);
-        final newValue1 = random.nextInt(100);
-        final newValue2 = random.nextInt(100);
+        final random = UniqueRandom();
+        final oldValue = random.next();
+        final newValue1 = random.next();
+        final newValue2 = random.next();
 
         // Create a _NanoRead.
         final nanoRead = _NanoRead(oldValue);
@@ -164,9 +164,9 @@ void main() {
 
       test("can have two subscriptions", () {
         // Generate random values.
-        final random = Random();
-        final oldValue = random.nextInt(100);
-        final newValue = random.nextInt(100);
+        final random = UniqueRandom();
+        final oldValue = random.next();
+        final newValue = random.next();
 
         // Create a _NanoRead.
         final nanoRead = _NanoRead(oldValue);
@@ -203,10 +203,10 @@ void main() {
 
       test("can unsubscribe on one of them", () {
         // Generate random values.
-        final random = Random();
-        final oldValue = random.nextInt(100);
-        final newValue1 = random.nextInt(100);
-        final newValue2 = random.nextInt(100);
+        final random = UniqueRandom();
+        final oldValue = random.next();
+        final newValue1 = random.next();
+        final newValue2 = random.next();
 
         // Create a _NanoRead.
         final nanoRead = _NanoRead(oldValue);
