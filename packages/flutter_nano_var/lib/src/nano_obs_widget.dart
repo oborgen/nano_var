@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:nano_var/nano_var.dart';
 
-/// A widget that can be used to listen to changes to [NanoRead]s and will
-/// rebuild itself when any change occurs.
+/// A widget that can be used to listen to changes to [NanoRead] instances and
+/// will rebuild itself when any change occurs.
 ///
 /// Users have to override the method `build` to use the widget.
 abstract class NanoObsWidget extends StatefulWidget {
@@ -11,7 +11,8 @@ abstract class NanoObsWidget extends StatefulWidget {
   }) : super(key: key);
 
   /// Builds the widget and provides the function `watch`, which can be used to
-  /// read the values of [NanoRead]s and subscribe to changes to those values.
+  /// read the values of [NanoRead] instances and subscribe to changes to those
+  /// values.
   Widget build(
     BuildContext context,
     T Function<T>(NanoRead<T> nanoRead) watch,
