@@ -10,4 +10,4 @@ dependencies:
 
 dev_dependencies:
   test: ^1.16.5
-  nano_mock: ^1.0.0
+  nano_mock: ^1.0.1
