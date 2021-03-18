@@ -60,3 +60,21 @@ class NanoReadText extends NanoObsWidget {
   }
 }
 ```
+
+## Motivation
+
+The developers behind NanoVar needed a state management library that fulfilled
+the following points:
+
+* The library requires a minimal amount of boilerplate to be usable.
+* Creation and destruction of state is controlled by the widget tree, so if a
+user for instance leaves a page, the state associated with that page is
+destroyed.
+
+No existing state management library could be found that fulfilled these points
+to a satisfying degree.
+Therefore, NanoVar was created. 
+The library is independent of any dependency injection method on purpose so
+the method best suited for any individual case can be used to provide
+dependency injection.
+This property is used to fulfill the second point.
