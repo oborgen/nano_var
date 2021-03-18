@@ -1,4 +1,4 @@
-# Flutter NanoVar Example
+# Flutter NanoVar example
 
 The default Flutter project using NanoVar to control the counter state.
 
