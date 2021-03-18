@@ -1,7 +1,8 @@
 name: nano_var
 
 description: >-
-  A variable that can notify subscribers when changes occur.
+  A variable that can be subscribed to so the subscribers get notified when
+  changes occur.
 
 version: 1.0.0
 
