@@ -7,6 +7,7 @@ import 'package:nano_var/nano_var.dart';
 ///
 /// Users have to override the method `build` to use the widget.
 abstract class NanoObsWidget extends StatefulWidget {
+  /// Creates a [NanoObsWidget] with an optional key.
   const NanoObsWidget({
     Key? key,
   }) : super(key: key);
@@ -31,6 +32,7 @@ class _NanoObsWidgetState extends State<NanoObsWidget> {
   /// unsubscribe functions.
   final Map<NanoRead, void Function()> subscriptions;
 
+  /// Creates a [_NanoObsWidgetState] without any subscriptions.
   _NanoObsWidgetState() : subscriptions = {};
 
   @override
