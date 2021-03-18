@@ -4,7 +4,7 @@ description: >-
   A lightweight state management library independent from any dependency
   injection methods.
 
-version: 1.0.0
+version: 1.0.1
 
 repository: https://github.com/oborgen/nano_var
 
