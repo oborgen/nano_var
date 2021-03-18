@@ -16,6 +16,11 @@ class NanoObs extends NanoObsWidget {
     T Function<T>(NanoRead<T> readable) watch,
   ) builder;
 
+  /// Creates a [NanoObsWidget] with a mandatory `builder` and an optional key.
+  ///
+  /// `builder` builds the widget and provides the function `watch`, which can
+  /// be used to read the values of [NanoRead] instances and subscribe to
+  /// changes to those values.
   const NanoObs({
     Key? key,
     required this.builder,

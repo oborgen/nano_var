@@ -47,6 +47,15 @@ jobs:
       - name: Run tests
         run: melos exec "flutter test --coverage"
 
+      # Run the nano_var example.
+      - name: Run the nano_var example
+        run: "dart packages/nano_var/example/main.dart"
+      
+      # Run the flutter_nano_var example, which has to be done through a test
+      # case.
+      - name: Run the flutter_nano_var example
+        run: "(cd packages/flutter_nano_var/example && flutter test)"
+
       # Publish coverage information to codecov.io.
       - name: Publish coverage
         env:

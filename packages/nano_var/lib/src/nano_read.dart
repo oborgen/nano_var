@@ -10,17 +10,18 @@ class NanoRead<T> {
 
   /// A list of callbacks that are called each time a change to the value
   /// occurs, i.e. the value's subscribers.
-  final List<void Function(T, T)> subscribers;
+  final List<void Function(T, T)> _subscribers;
 
   /// Returns the current number of subscribers.
   ///
   /// This getter is only supposed to be used in test cases.
   @visibleForTesting
-  int get subscribersCount => subscribers.length;
+  int get subscribersCount => _subscribers.length;
 
+  /// Creates a new [NanoRead] with a given `initialValue`.
   NanoRead(T initialValue)
       : _value = initialValue,
-        subscribers = [];
+        _subscribers = [];
 
   /// Gets the current value.
   T get value {
@@ -34,14 +35,14 @@ class NanoRead<T> {
   /// value, which means `callback` will never be called again by the class.
   void Function() subscribe(void Function(T oldValue, T newValue) callback) {
     // Add the given callback to the list of subscribers.
-    subscribers.add(callback);
+    _subscribers.add(callback);
 
     // Return a callback that can be used to unsubscribe to the variable.
     return () {
       // Remove the given callback.
       // This works since Dart compares the memory addresses of the callbacks
       // and thereby can remove the given callback.
-      subscribers.remove(callback);
+      _subscribers.remove(callback);
     };
   }
 
@@ -60,7 +61,7 @@ class NanoRead<T> {
       _value = newValue;
 
       // Call each subscriber.
-      subscribers.forEach((callback) {
+      _subscribers.forEach((callback) {
         // Call callback on the current subscriber with the old and new values.
         callback(oldValue, newValue);
       });
