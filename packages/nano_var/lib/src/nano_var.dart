@@ -5,6 +5,7 @@ import 'nano_read.dart';
 ///
 /// The value can be both get and set.
 class NanoVar<T> extends NanoRead<T> {
+  /// Creates a new [NanoVar] with a given `initialValue`.
   NanoVar(T initialValue) : super(initialValue);
 
   /// Sets the current value and notifies all subscribers.

@@ -18,6 +18,7 @@ class NanoRead<T> {
   @visibleForTesting
   int get subscribersCount => _subscribers.length;
 
+  /// Creates a new [NanoRead] with a given `initialValue`.
   NanoRead(T initialValue)
       : _value = initialValue,
         _subscribers = [];
