@@ -1,3 +1,5 @@
+import 'nano_read_subscribe_callback.dart';
+
 /// Instances of [NanoRead] can be used to access a value of type `T` and
 /// it's possible to subscribe to changes to this value.
 abstract class NanoRead<T> {
@@ -9,5 +11,5 @@ abstract class NanoRead<T> {
   ///
   /// The function returns a function that when called unsubscribes to the
   /// value, which means `callback` will never be called again.
-  void Function() subscribe(void Function(T oldValue, T newValue) callback);
+  void Function() subscribe(NanoReadSubscribeCallback callback);
 }

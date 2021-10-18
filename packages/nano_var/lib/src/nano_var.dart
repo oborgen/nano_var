@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
 import 'nano_read.dart';
+import 'nano_read_subscribe_callback.dart';
 
 /// Instances of this class holds a value of type `T` and it's possible to
 /// subscribe to changes to this value.
@@ -35,7 +36,7 @@ class NanoVar<T> extends NanoRead<T> {
   ///
   /// The function returns a function that when called unsubscribes to the
   /// value, which means `callback` will never be called again by the class.
-  void Function() subscribe(void Function(T oldValue, T newValue) callback) {
+  void Function() subscribe(NanoReadSubscribeCallback callback) {
     // Add the given callback to the list of subscribers.
     _subscribers.add(callback);
 
