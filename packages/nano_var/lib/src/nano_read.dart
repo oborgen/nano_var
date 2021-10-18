@@ -11,5 +11,5 @@ abstract class NanoRead<T> {
   ///
   /// The function returns a function that when called unsubscribes to the
   /// value, which means `callback` will never be called again.
-  void Function() subscribe(NanoReadSubscribeCallback callback);
+  void Function() subscribe(NanoReadSubscribeCallback<T> callback);
 }

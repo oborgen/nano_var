@@ -36,7 +36,7 @@ class NanoVar<T> extends NanoRead<T> {
   ///
   /// The function returns a function that when called unsubscribes to the
   /// value, which means `callback` will never be called again by the class.
-  void Function() subscribe(NanoReadSubscribeCallback callback) {
+  void Function() subscribe(NanoReadSubscribeCallback<T> callback) {
     // Add the given callback to the list of subscribers.
     _subscribers.add(callback);
 
