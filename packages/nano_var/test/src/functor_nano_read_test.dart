@@ -268,6 +268,57 @@ void main() {
         // value.
         verifyMapper.called(1);
       });
+
+      test("oldValue is correct when subscribing after the value has changed",
+          () {
+        // Generate random values.
+        final random = UniqueRandom();
+        final initialValue = random.next();
+        final oldValue = random.next();
+        final newValue = random.next();
+        final incrementBy = random.next();
+
+        // Create a NanoVar.
+        final nanoVar = NanoVar(initialValue);
+
+        // Create a mapper.
+        final mapper = NanoMock<int>();
+
+        // Set up mapper to accept the initial value.
+        mapper.when(initialValue + incrementBy, [initialValue]);
+
+        // Set up mapper to accept the old value.
+        mapper.when(oldValue + incrementBy, [oldValue]);
+
+        // Set up mapper to accept the new value.
+        mapper.when(newValue + incrementBy, [newValue]);
+
+        // Call map on the NanoVar.
+        final functorNanoVar = nanoVar.map((value) => mapper([value]));
+
+        // Assign to value to trigger a change.
+        nanoVar.value = oldValue;
+
+        // Create a mock.
+        final fakeSubscriber = NanoMock<void>();
+
+        // Set up the mock to accept the generated random values.
+        final verifySubscriber = fakeSubscriber.whenVoid([
+          oldValue + incrementBy,
+          newValue + incrementBy,
+        ]);
+
+        // Subscribe to the FunctorNanoVar.
+        functorNanoVar.subscribe(
+          (oldValue, newValue) => fakeSubscriber([oldValue, newValue]),
+        );
+
+        // Assign to value to trigger another change.
+        nanoVar.value = newValue;
+
+        // Verify fakeSubscriber has been called once.
+        verifySubscriber.called(1);
+      });
     });
   });
 }

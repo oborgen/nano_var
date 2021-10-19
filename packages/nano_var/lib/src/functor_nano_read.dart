@@ -93,6 +93,12 @@ class _FunctorNanoRead<T, S> implements NanoRead<S> {
   void _updateSubscribeToSource() {
     // Check if source already has been subscribed to.
     if (_unsubscribeSource == null) {
+      // Call _update to update _sourceValue and _resultValue if necessary.
+      // This is needed since source's value might have been updated since this
+      // _FlutterNanoRead instance was created and there is no method to get
+      // this update otherwise.
+      _update(source.value);
+
       // Subscribe to source as no subscription already exists and assign the
       // unsubscribe function to _unsubscribeSource.
       _unsubscribeSource = source.subscribe((_, sourceValue) {
