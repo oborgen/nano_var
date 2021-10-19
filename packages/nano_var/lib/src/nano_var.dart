@@ -8,7 +8,7 @@ import 'nano_read_subscribe_callback.dart';
 /// subscribe to changes to this value.
 ///
 /// The value can be both get and set.
-class NanoVar<T> extends NanoRead<T> {
+class NanoVar<T> implements NanoRead<T> {
   /// The value held by the instance.
   T _value;
 
