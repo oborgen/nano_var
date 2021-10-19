@@ -256,7 +256,7 @@ void main() {
         // Verify mapper has not been called.
         verifyMapper.neverCalled();
 
-        // Assign to value to trigger another change.
+        // Assign to value to trigger a change.
         nanoVar.value = newValue;
 
         // Verify both mocks have been called once.

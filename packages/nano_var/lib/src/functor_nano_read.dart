@@ -84,7 +84,7 @@ class _FunctorNanoRead<T, S> implements NanoRead<S> {
       // Assign the new value to _sourceValue.
       _sourceValue = sourceValue;
 
-      // Call mapper with the new value and assign it to _resultValue.
+      // Call mapper with the new value and assign the result to _resultValue.
       _resultValue = mapper(sourceValue);
     }
   }
