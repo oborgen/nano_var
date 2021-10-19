@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import 'nano_channel.dart';
 import 'nano_read.dart';
 import 'nano_read_subscribe_callback.dart';
 
@@ -11,20 +12,19 @@ class NanoVar<T> extends NanoRead<T> {
   /// The value held by the instance.
   T _value;
 
-  /// A list of callbacks that are called each time a change to the value
-  /// occurs, i.e. the value's subscribers.
-  final List<void Function(T, T)> _subscribers;
+  /// A NanoChannel that handles subscriptions.
+  final NanoChannel<T> _channel;
 
   /// Returns the current number of subscribers.
   ///
   /// This getter is only supposed to be used in test cases.
   @visibleForTesting
-  int get subscribersCount => _subscribers.length;
+  int get subscribersCount => _channel.subscribersCount;
 
   /// Creates a new [NanoRead] with a given `initialValue`.
   NanoVar(T initialValue)
       : _value = initialValue,
-        _subscribers = [];
+        _channel = NanoChannel();
 
   /// Gets the current value.
   T get value {
@@ -37,16 +37,8 @@ class NanoVar<T> extends NanoRead<T> {
   /// The function returns a function that when called unsubscribes to the
   /// value, which means `callback` will never be called again by the class.
   void Function() subscribe(NanoReadSubscribeCallback<T> callback) {
-    // Add the given callback to the list of subscribers.
-    _subscribers.add(callback);
-
-    // Return a callback that can be used to unsubscribe to the variable.
-    return () {
-      // Remove the given callback.
-      // This works since Dart compares the memory addresses of the callbacks
-      // and thereby can remove the given callback.
-      _subscribers.remove(callback);
-    };
+    // Add the subscriber to _channel.
+    return _channel.subscribe(callback);
   }
 
   /// Sets the current value and notifies all subscribers.
@@ -60,11 +52,8 @@ class NanoVar<T> extends NanoRead<T> {
       // Set newValue as the new value.
       _value = newValue;
 
-      // Call each subscriber.
-      _subscribers.forEach((callback) {
-        // Call callback on the current subscriber with the old and new values.
-        callback(oldValue, newValue);
-      });
+      // Emit the value pair to the channel.
+      _channel.emit(oldValue, newValue);
     }
   }
 }
