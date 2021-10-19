@@ -70,16 +70,13 @@ class _FunctorNanoRead<T, S> implements NanoRead<S> {
   @override
   S get value {
     // Call _update to update _sourceValue and _resultValue if necessary.
-    _update();
+    _update(source.value);
 
     // Return _resultValue.
     return _resultValue;
   }
 
-  void _update() {
-    // Get source's current value.
-    final sourceValue = source.value;
-
+  void _update(T sourceValue) {
     // Check if source's value has changed.
     if (_sourceValue != sourceValue) {
       // Assign the new value to _sourceValue.
@@ -95,12 +92,12 @@ class _FunctorNanoRead<T, S> implements NanoRead<S> {
     if (_unsubscribeSource == null) {
       // Subscribe to source as no subscription already exists and assign the
       // unsubscribe function to _unsubscribeSource.
-      _unsubscribeSource = source.subscribe((_, __) {
+      _unsubscribeSource = source.subscribe((_, sourceValue) {
         // Store the current _resultValue.
         final oldResultValue = _resultValue;
 
         // Call _update to update _sourceValue and _resultValue.
-        _update();
+        _update(sourceValue);
 
         // Emit a new pair on _channel with the previously stored _resultValue
         // and the newly calculated _resultValue.
