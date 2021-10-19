@@ -76,6 +76,8 @@ class _FunctorNanoRead<T, S> implements NanoRead<S> {
     return _resultValue;
   }
 
+  /// Accepts a `sourceValue` and uses it to update _sourceValue and
+  /// _resultValue if it differs from _sourceValue.
   void _update(T sourceValue) {
     // Check if source's value has changed.
     if (_sourceValue != sourceValue) {
@@ -87,6 +89,7 @@ class _FunctorNanoRead<T, S> implements NanoRead<S> {
     }
   }
 
+  /// Subscribes to source if necessary.
   void _updateSubscribeToSource() {
     // Check if source already has been subscribed to.
     if (_unsubscribeSource == null) {
@@ -106,6 +109,7 @@ class _FunctorNanoRead<T, S> implements NanoRead<S> {
     }
   }
 
+  /// Unsubscribe to source if necessary.
   void _updateUnsubscribeToSource() {
     // Get _unsubscribeSource.
     final unsubscribeSource = _unsubscribeSource;
