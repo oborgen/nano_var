@@ -1,5 +1,4 @@
-import 'package:nano_var/src/nano_channel.dart';
-
+import 'nano_channel.dart';
 import 'nano_read.dart';
 
 /// An extension of [NanoRead] that makes [NanoRead] act as a functor,
