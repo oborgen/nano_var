@@ -19,18 +19,18 @@ void main() {
         // Create another NanoVar.
         final nanoVar2 = NanoVar(initialValue2);
 
-        // Create a mapper.
-        final mapper = NanoMock<int>();
+        // Create a lifter.
+        final lifter = NanoMock<int>();
 
-        // Set up mapper to accept the initial values.
-        final verify = mapper.when(
+        // Set up lifter to accept the initial values.
+        final verify = lifter.when(
           initialValue1 + initialValue2,
           [initialValue1, initialValue2],
         );
 
         // Call liftA2 on the NanoVar instances.
         final applicativeNanoVar = nanoVar1.liftA2(
-          (value1, value2) => mapper([value1, value2]),
+          (value1, value2) => lifter([value1, value2]),
           nanoVar2,
         );
 
@@ -40,7 +40,7 @@ void main() {
           equals(initialValue1 + initialValue2),
         );
 
-        // Verify mapper has been called once.
+        // Verify lifter has been called once.
         verify.called(1);
       });
 
@@ -58,30 +58,30 @@ void main() {
         // Create another NanoVar.
         final nanoVar2 = NanoVar(oldValue2);
 
-        // Create a mapper.
-        final mapper = NanoMock<int>();
+        // Create a lifter.
+        final lifter = NanoMock<int>();
 
-        // Set up mapper to accept the old values.
-        mapper.when(
+        // Set up lifter to accept the old values.
+        lifter.when(
           oldValue1 + oldValue2,
           [oldValue1, oldValue2],
         );
 
-        // Set up mapper to accept the first new value and the second old value.
-        final verify1 = mapper.when(
+        // Set up lifter to accept the first new value and the second old value.
+        final verify1 = lifter.when(
           newValue1 + oldValue2,
           [newValue1, oldValue2],
         );
 
-        // Set up mapper to accept the new values.
-        final verify2 = mapper.when(
+        // Set up lifter to accept the new values.
+        final verify2 = lifter.when(
           newValue1 + newValue2,
           [newValue1, newValue2],
         );
 
         // Call liftA2 on the NanoVar instances.
         final applicativeNanoVar = nanoVar1.liftA2(
-          (value1, value2) => mapper([value1, value2]),
+          (value1, value2) => lifter([value1, value2]),
           nanoVar2,
         );
 
@@ -94,7 +94,7 @@ void main() {
           equals(newValue1 + oldValue2),
         );
 
-        // Verify mapper has been called once.
+        // Verify lifter has been called once.
         verify1.called(1);
 
         // Assign to the second NanoVar's value to trigger a change.
@@ -106,7 +106,7 @@ void main() {
           equals(newValue1 + newValue2),
         );
 
-        // Verify mapper has been called once.
+        // Verify lifter has been called once.
         verify2.called(1);
       });
     });
@@ -127,30 +127,30 @@ void main() {
         // Create another NanoVar.
         final nanoVar2 = NanoVar(oldValue2);
 
-        // Create a mapper.
-        final mapper = NanoMock<int>();
+        // Create a lifter.
+        final lifter = NanoMock<int>();
 
-        // Set up mapper to accept the old value.
-        mapper.when(
+        // Set up lifter to accept the old value.
+        lifter.when(
           oldValue1 + oldValue2,
           [oldValue1, oldValue2],
         );
 
-        // Set up mapper to accept the first new value and the second old value.
-        final verifyMapper1 = mapper.when(
+        // Set up lifter to accept the first new value and the second old value.
+        final verifyLifter1 = lifter.when(
           newValue1 + oldValue2,
           [newValue1, oldValue2],
         );
 
-        // Set up mapper to accept the new values.
-        final verifyMapper2 = mapper.when(
+        // Set up lifter to accept the new values.
+        final verifyLifter2 = lifter.when(
           newValue1 + newValue2,
           [newValue1, newValue2],
         );
 
         // Call liftA2 on the NanoVar instances.
         final applicativeNanoVar = nanoVar1.liftA2(
-          (value1, value2) => mapper([value1, value2]),
+          (value1, value2) => lifter([value1, value2]),
           nanoVar2,
         );
 
@@ -191,8 +191,8 @@ void main() {
         // Verify fakeSubscriber has not been called.
         verifySubscriber1.neverCalled();
 
-        // Verify mapper has not been called.
-        verifyMapper1.neverCalled();
+        // Verify lifter has not been called.
+        verifyLifter1.neverCalled();
 
         // Assign to the first NanoVar's value to trigger a change.
         nanoVar1.value = newValue1;
@@ -200,14 +200,14 @@ void main() {
         // Verify fakeSubscriber has been called once.
         verifySubscriber1.called(1);
 
-        // Verify mapper has been called once.
-        verifyMapper1.called(1);
+        // Verify lifter has been called once.
+        verifyLifter1.called(1);
 
         // Verify fakeSubscriber has not been called.
         verifySubscriber2.neverCalled();
 
-        // Verify mapper has not been called.
-        verifyMapper2.neverCalled();
+        // Verify lifter has not been called.
+        verifyLifter2.neverCalled();
 
         // Assign to the second NanoVar's value to trigger a change.
         nanoVar2.value = newValue2;
@@ -215,8 +215,8 @@ void main() {
         // Verify fakeSubscriber has been called twice.
         verifySubscriber2.called(1);
 
-        // Verify mapper has been called twice.
-        verifyMapper2.called(1);
+        // Verify lifter has been called twice.
+        verifyLifter2.called(1);
       });
 
       test("can unsubscribe", () {
@@ -235,30 +235,30 @@ void main() {
         // Create another NanoVar.
         final nanoVar2 = NanoVar(oldValue2);
 
-        // Create a mapper.
-        final mapper = NanoMock<int>();
+        // Create a lifter.
+        final lifter = NanoMock<int>();
 
-        // Set up mapper to accept the old value.
-        mapper.when(
+        // Set up lifter to accept the old value.
+        lifter.when(
           oldValue1 + oldValue2,
           [oldValue1, oldValue2],
         );
 
-        // Set up mapper to accept the first new value and the second old value.
-        final verifyMapper1 = mapper.when(
+        // Set up lifter to accept the first new value and the second old value.
+        final verifyLifter1 = lifter.when(
           newValue1 + oldValue2,
           [newValue1, oldValue2],
         );
 
-        // Set up mapper to accept the new values.
-        final verifyMapper2 = mapper.when(
+        // Set up lifter to accept the new values.
+        final verifyLifter2 = lifter.when(
           newValue1 + newValue2,
           [newValue1, newValue2],
         );
 
         // Call liftA2 on the NanoVar instances.
         final applicativeNanoVar = nanoVar1.liftA2(
-          (value1, value2) => mapper([value1, value2]),
+          (value1, value2) => lifter([value1, value2]),
           nanoVar2,
         );
 
@@ -299,8 +299,8 @@ void main() {
         // Verify fakeSubscriber has not been called.
         verifySubscriber1.neverCalled();
 
-        // Verify mapper has not been called.
-        verifyMapper1.neverCalled();
+        // Verify lifter has not been called.
+        verifyLifter1.neverCalled();
 
         // Assign to the first NanoVar's value to trigger a change.
         nanoVar1.value = newValue1;
@@ -308,14 +308,14 @@ void main() {
         // Verify fakeSubscriber has been called once.
         verifySubscriber1.called(1);
 
-        // Verify mapper has been called once.
-        verifyMapper1.called(1);
+        // Verify lifter has been called once.
+        verifyLifter1.called(1);
 
         // Verify fakeSubscriber has not been called.
         verifySubscriber2.neverCalled();
 
-        // Verify mapper has not been called.
-        verifyMapper2.neverCalled();
+        // Verify lifter has not been called.
+        verifyLifter2.neverCalled();
 
         // Assign to the second NanoVar's value to trigger a change.
         nanoVar2.value = newValue2;
@@ -323,8 +323,8 @@ void main() {
         // Verify fakeSubscriber has been called twice.
         verifySubscriber2.called(1);
 
-        // Verify mapper has been called twice.
-        verifyMapper2.called(1);
+        // Verify lifter has been called twice.
+        verifyLifter2.called(1);
 
         // Call unsubscribe.
         unsubscribe();
@@ -368,30 +368,30 @@ void main() {
         // Create another NanoVar.
         final nanoVar2 = NanoVar(oldValue2);
 
-        // Create a mapper.
-        final mapper = NanoMock<int>();
+        // Create a lifter.
+        final lifter = NanoMock<int>();
 
-        // Set up mapper to accept the old value.
-        mapper.when(
+        // Set up lifter to accept the old value.
+        lifter.when(
           oldValue1 + oldValue2,
           [oldValue1, oldValue2],
         );
 
-        // Set up mapper to accept the first new value and the second old value.
-        final verifyMapper1 = mapper.when(
+        // Set up lifter to accept the first new value and the second old value.
+        final verifyLifter1 = lifter.when(
           newValue1 + oldValue2,
           [newValue1, oldValue2],
         );
 
-        // Set up mapper to accept the new values.
-        final verifyMapper2 = mapper.when(
+        // Set up lifter to accept the new values.
+        final verifyLifter2 = lifter.when(
           newValue1 + newValue2,
           [newValue1, newValue2],
         );
 
         // Call liftA2 on the NanoVar instances.
         final applicativeNanoVar = nanoVar1.liftA2(
-          (value1, value2) => mapper([value1, value2]),
+          (value1, value2) => lifter([value1, value2]),
           nanoVar2,
         );
 
@@ -449,8 +449,8 @@ void main() {
         verifySubscriber1.neverCalled();
         verifySubscriber2.neverCalled();
 
-        // Verify mapper has not been called.
-        verifyMapper1.neverCalled();
+        // Verify lifter has not been called.
+        verifyLifter1.neverCalled();
 
         // Assign to the first NanoVar's value to trigger a change.
         nanoVar1.value = newValue1;
@@ -459,17 +459,17 @@ void main() {
         verifySubscriber1.called(1);
         verifySubscriber2.called(1);
 
-        // Verify mapper has been called once.
+        // Verify lifter has been called once.
         // ApplicativeNanoVar should optimize so both subscribers get the same
         // value.
-        verifyMapper1.called(1);
+        verifyLifter1.called(1);
 
         // Verify fakeSubscriber has not been called.
         verifySubscriber3.neverCalled();
         verifySubscriber4.neverCalled();
 
-        // Verify mapper has not been called.
-        verifyMapper2.neverCalled();
+        // Verify lifter has not been called.
+        verifyLifter2.neverCalled();
 
         // Assign to the second NanoVar's value to trigger a change.
         nanoVar2.value = newValue2;
@@ -478,10 +478,10 @@ void main() {
         verifySubscriber3.called(1);
         verifySubscriber4.called(1);
 
-        // Verify mapper has been called twice.
+        // Verify lifter has been called twice.
         // ApplicativeNanoVar should optimize so both subscribers get the same
         // value.
-        verifyMapper2.called(1);
+        verifyLifter2.called(1);
       });
 
       test("oldValue is correct when subscribing after the value has changed",
@@ -500,30 +500,30 @@ void main() {
         // Create another NanoVar.
         final nanoVar2 = NanoVar(oldValue2);
 
-        // Create a mapper.
-        final mapper = NanoMock<int>();
+        // Create a lifter.
+        final lifter = NanoMock<int>();
 
-        // Set up mapper to accept the initial values.
-        mapper.when(
+        // Set up lifter to accept the initial values.
+        lifter.when(
           initialValue1 + initialValue2,
           [initialValue1, initialValue2],
         );
 
-        // Set up mapper to accept the old values.
-        mapper.when(
+        // Set up lifter to accept the old values.
+        lifter.when(
           oldValue1 + oldValue2,
           [oldValue1, oldValue2],
         );
 
-        // Set up mapper to accept the new value.
-        mapper.when(
+        // Set up lifter to accept the new value.
+        lifter.when(
           newValue + oldValue2,
           [newValue, oldValue2],
         );
 
         // Call liftA2 on the NanoVar instances.
         final applicativeNanoVar = nanoVar1.liftA2(
-          (value1, value2) => mapper([value1, value2]),
+          (value1, value2) => lifter([value1, value2]),
           nanoVar2,
         );
 
