@@ -2,7 +2,7 @@ import 'package:nano_mock/nano_mock.dart';
 import 'package:nano_var/nano_var.dart';
 import 'package:test/test.dart';
 
-import 'utils/unique_random.dart';
+import '../utils/unique_random.dart';
 
 void main() {
   group("ApplicativeNanoVar", () {

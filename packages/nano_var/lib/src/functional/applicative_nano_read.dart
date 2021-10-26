@@ -1,5 +1,5 @@
-import 'nano_channel.dart';
-import 'nano_read.dart';
+import '../nano_channel.dart';
+import '../nano_read.dart';
 
 /// An extension of [NanoRead] that makes [NanoRead] act as an applicative,
 /// i.e. the method `liftA2` can be called with a callback, which returns a new
