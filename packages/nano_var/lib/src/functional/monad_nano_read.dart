@@ -6,7 +6,10 @@ import '../nano_read.dart';
 /// [NanoRead] instance containing the values returned by the [NanoRead]
 /// instance most recently returned by `binder`.
 extension MonadNanoRead<T> on NanoRead<T> {
+  /// Binds this [NanoRead] with the given callback `binder` and returns a new
+  /// [NanoRead] instance as a result.
   NanoRead<S> bind<S>(NanoRead<S> Function(T) binder) {
+    // Create and return a _MonadNanoRead, which handles all logic.
     return _MonadNanoRead(this, binder);
   }
 }
