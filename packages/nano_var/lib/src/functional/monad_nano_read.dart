@@ -1,5 +1,5 @@
-import 'nano_channel.dart';
-import 'nano_read.dart';
+import '../nano_channel.dart';
+import '../nano_read.dart';
 
 /// An extension of [NanoRead] that makes [NanoRead] act as a monad,
 /// i.e. the method `binder` can be called with a callback, which returns a new
