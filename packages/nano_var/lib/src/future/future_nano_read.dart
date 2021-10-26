@@ -6,7 +6,10 @@ import 'future_nano_read_status.dart';
 /// [Future] where the created [NanoRead] instance contains the completion
 /// status of the [Future].
 extension FutureNanoRead<T> on Future<T> {
+  /// Creates a [NanoRead] instance from the [Future] where the created
+  /// [NanoRead] instance contains the completion status of the [Future].
   NanoRead<FutureNanoReadStatus<T>> get nanoRead {
+    // Create and return a _FutureNanoRead, which handles all logic.
     return _FutureNanoRead(this);
   }
 }
