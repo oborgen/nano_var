@@ -6,7 +6,10 @@ import '../nano_read.dart';
 /// [NanoRead] instance containing the values returned by the given callback,
 /// updated as the original [NanoRead] instances updates.
 extension ApplicativeNanoRead<T> on NanoRead<T> {
+  /// Lifts this [NanoRead] with the given callback `lifter` and another
+  /// [NanoRead] and returns a new [NanoRead] instance as a result.
   NanoRead<U> liftA2<S, U>(U Function(T, S) lifter, NanoRead<S> other) {
+    // Create and return an _ApplicativeNanoRead, which handles all logic.
     return _ApplicativeNanoRead(this, other, lifter);
   }
 }
