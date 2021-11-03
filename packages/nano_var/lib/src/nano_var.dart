@@ -4,7 +4,7 @@ import 'nano_channel.dart';
 import 'nano_read.dart';
 import 'nano_read_subscribe_callback.dart';
 
-/// Instances of this class holds a value of type `T` and it's possible to
+/// Instances of this class holds a value of type [T] and it's possible to
 /// subscribe to changes to this value.
 ///
 /// The value can be both get and set.
@@ -21,21 +21,17 @@ class NanoVar<T> implements NanoRead<T> {
   @visibleForTesting
   int get subscribersCount => _channel.subscribersCount;
 
-  /// Creates a new [NanoRead] with a given `initialValue`.
+  /// Creates a new [NanoVar] with a given [initialValue].
   NanoVar(T initialValue)
       : _value = initialValue,
         _channel = NanoChannel();
 
-  /// Gets the current value.
+  @override
   T get value {
     return _value;
   }
 
-  /// Subscribes to changes to the value, which means `callback` is called each
-  /// time a change occurs.
-  ///
-  /// The function returns a function that when called unsubscribes to the
-  /// value, which means `callback` will never be called again by the class.
+  @override
   void Function() subscribe(NanoReadSubscribeCallback<T> callback) {
     // Add the subscriber to _channel.
     return _channel.subscribe(callback);

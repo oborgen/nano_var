@@ -2,11 +2,11 @@ import '../nano_channel.dart';
 import '../nano_read.dart';
 
 /// An extension of [NanoRead] that makes [NanoRead] act as a functor,
-/// i.e. the method `map` can be called with a callback, which returns a new
+/// i.e. the method [map] can be called with a callback, which returns a new
 /// [NanoRead] instance containing the values returned by the given callback,
 /// updated as the original [NanoRead] updates.
 extension FunctorNanoRead<T> on NanoRead<T> {
-  /// Maps this [NanoRead] with the given callback `mapper` and returns a new
+  /// Maps this [NanoRead] with the given callback [mapper] and returns a new
   /// [NanoRead] instance as a result.
   NanoRead<S> map<S>(S Function(T) mapper) {
     // Create and return a _FunctorNanoRead, which handles all logic.
@@ -16,10 +16,10 @@ extension FunctorNanoRead<T> on NanoRead<T> {
 
 /// A [NanoRead] instance that handles the functor logic.
 class _FunctorNanoRead<T, S> implements NanoRead<S> {
-  /// The original [NanoRead] to retrieve arguments to `mapper` from.
+  /// The original [NanoRead] to retrieve arguments to [mapper] from.
   final NanoRead<T> source;
 
-  /// A function used to call each value from `source` with to create new
+  /// A function used to call each value from [source] with to create new
   /// values.
   final S Function(T) mapper;
 
@@ -27,17 +27,19 @@ class _FunctorNanoRead<T, S> implements NanoRead<S> {
   /// instance.
   final NanoChannel<S> _channel;
 
-  /// The unsubscribe callback for `source`.
+  /// The unsubscribe callback for [source].
   ///
   /// The value is null when this [_FunctorNanoRead] has no subscribers.
   void Function()? _unsubscribeSource;
 
-  /// The most recently retrieved value from `source`.
+  /// The most recently retrieved value from [source].
   late T _sourceValue;
 
-  /// The most recently value calculated by `mapper.
+  /// The most recently value calculated by [mapper].
   late S _resultValue;
 
+  /// Creates a new [_FunctorNanoRead] that handles the functor logic of
+  /// [source] using [mapper].
   _FunctorNanoRead(
     this.source,
     this.mapper,
@@ -75,8 +77,8 @@ class _FunctorNanoRead<T, S> implements NanoRead<S> {
     return _resultValue;
   }
 
-  /// Accepts a `sourceValue` and uses it to update _sourceValue and
-  /// _resultValue if it differs from _sourceValue.
+  /// Accepts a [sourceValue] and uses it to update [_sourceValue] and
+  /// [_resultValue] if it differs from [_sourceValue].
   void _update(T sourceValue) {
     // Check if source's value has changed.
     if (_sourceValue != sourceValue) {
