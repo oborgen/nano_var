@@ -123,7 +123,7 @@ Future<DetailsModel> loadDetails(int id) async {
 ```
 
 Call `loadDetails` and then call `nanoRead` on the returned Future instance to
-get a NanoRead instance that updates whenever the Future is completed:
+get a NanoRead instance that updates whenever the Future instance is completed:
 
 ```
 final futureNanoRead = loadDetails(1).nanoRead;
@@ -155,9 +155,9 @@ final unsubscribe = futureNanoRead.subscribe((oldStatus, newStatus) {
 ```
 
 A possible use case is to combine this feature with `bind` so that
-`loadDetails` can be called each time `counter` changes and the current loading
-status for the most recent value of `counter` can be managed using a NanoRead
-instance:
+`loadDetails` can be called each time `counter` is changed and the current
+loading status for the most recent value of `counter` can be managed using a
+NanoRead instance:
 
 ```
 final detailsStatus = counter.bind((int value) {
