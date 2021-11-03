@@ -170,7 +170,7 @@ class _MonadNanoRead<T, S> implements NanoRead<S> {
     if (_unsubscribeOuterSource == null && _unsubscribeInnerSource == null) {
       // Call _update to update any changed value.
       // This is needed since the source values might have been updated since
-      // this _ApplicativeNanoRead instance was created and there is no method
+      // this _MonadNanoRead instance was created and there is no method
       // to get these updates otherwise.
       _update();
 
