@@ -128,29 +128,29 @@ get a NanoRead instance that updates whenever the Future instance is completed:
 ```dart
 final futureNanoRead = loadDetails(1).nanoRead;
 
-void printStatus(status) {
+void getStatus(status) {
     return status.status(
         uncompleted: () {
-            print("futureNanoRead has not yet completed");
+            return "futureNanoRead has not yet completed";
         },
         success: (value) {
-            print("futureNanoRead has completed with the value $value");
+            return "futureNanoRead has completed with the value $value";
         },
         fail: (error, stackTrace) {
-            print("futureNanoRead has completed with the error $error " +
-                "and the stack trace $stackTrace");
+            return "futureNanoRead has completed with the error $error " +
+                "and the stack trace $stackTrace";
         },
     );
 }
 
 // Prints "futureNanoRead has not yet completed".
-printStatus(futureNanoRead.value);
+print(getStatus(futureNanoRead.value));
 
 // Eventually prints "futureNanoRead has completed with the value..."
 // if loadCount() succeeds or "futureNanoRead has completed with the error..."
 // if loadCount() fails.
 final unsubscribe = futureNanoRead.subscribe((oldStatus, newStatus) {
-    printStatus(newStatus);
+    print(getStatus(newStatus));
 });
 ```
 
