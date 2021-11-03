@@ -91,7 +91,7 @@ final doubleCounter = NanoVar(0.0);
 
 final stringCounter = counter.liftA2((int firstValue, double secondValue) {
     return (firstValue + secondValue).toString();
-});
+}, doubleCounter);
 ```
 
 The returned NanoRead instance `stringCounter` is updated whenever a change is
