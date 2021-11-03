@@ -1,0 +1,7 @@
+build
+doc
+coverage
+android
+ios
+web
+*.iml
