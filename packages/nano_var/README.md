@@ -14,13 +14,13 @@ changes occur.
 
 Create a NanoVar instance with a given initial value:
 
-```
+```dart
 final counter = NanoVar(0);
 ```
 
 Subscribe to changes made to the value of the NanoVar instance:
 
-```
+```dart
 final unsubscribe = counter.subscribe((int oldValue, int newValue) {
     print("The counter changed from $oldValue to $newValue");
 });
@@ -28,7 +28,7 @@ final unsubscribe = counter.subscribe((int oldValue, int newValue) {
 
 Assign a new value to the NanoVar instance:
 
-```
+```dart
 counter.value = 1;
 ```
 
@@ -37,7 +37,7 @@ previous value.
 
 Call `unsubscribe` to make the NanoVar instance stop calling the callback:
 
-```
+```dart
 unsubscribe();
 ```
 
@@ -46,7 +46,7 @@ unsubscribe();
 NanoVar instances can be casted to the type NanoRead, which contains the same
 functionality for accessing values as NanoVar yet cannot be altered:
 
-```
+```dart
 final NanoRead<int> readOnlyCounter = counter;
 
 // This line will cause a compilation error.
@@ -63,7 +63,7 @@ like functors, applicative functors and monads.
 Call `map` on an existing NanoVar instance with a function that can transform
 any value held by the NanoVar instance to another value:
 
-```
+```dart
 final stringCounter = counter.map((int value) {
     return value.toString();
 });
@@ -74,7 +74,7 @@ made to `counter` and `stringCounter` can be used in the same way as `counter`
 for the purpose of retrieving values.
 For instance, `stringCounter` can be subscribed to:
 
-```
+```dart
 final unsubscribe = counter.subscribe((String oldValue, String newValue) {
     print("The counter changed from $oldValue to $newValue");
 });
@@ -86,7 +86,7 @@ Call `liftA2` on an existing NanoVar instance with another NanoVar instance and
 a function that can transform any value pair held by the NanoVar instances to a
 third value:
 
-```
+```dart
 final doubleCounter = NanoVar(0.0);
 
 final stringCounter = counter.liftA2((int firstValue, double secondValue) {
@@ -102,7 +102,7 @@ made to `counter` or `doubleCounter`.
 Call `bind` on an existing NanoVar instance with a function that can transform
 any value held by the NanoVar instance to another NanoVar instance:
 
-```
+```dart
 final stringCounter = counter.bind((int value) {
     return NanoVar(value.toString());
 });
@@ -116,7 +116,7 @@ callback provided to `bind`.
 
 Suppose this asynchronous function exists:
 
-```
+```dart
 Future<DetailsModel> loadDetails(int id) async {
     return await callEndpoint("/details/$id");
 }
@@ -125,7 +125,7 @@ Future<DetailsModel> loadDetails(int id) async {
 Call `loadDetails` and then call `nanoRead` on the returned Future instance to
 get a NanoRead instance that updates whenever the Future instance is completed:
 
-```
+```dart
 final futureNanoRead = loadDetails(1).nanoRead;
 
 void printStatus(status) {
@@ -159,7 +159,7 @@ A possible use case is to combine this feature with `bind` so that
 loading status for the most recent value of `counter` can be managed using a
 NanoRead instance:
 
-```
+```dart
 final detailsStatus = counter.bind((int value) {
     return loadDetails(value).nanoRead;
 });
