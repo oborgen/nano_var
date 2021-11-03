@@ -2,11 +2,11 @@ import '../nano_channel.dart';
 import '../nano_read.dart';
 
 /// An extension of [NanoRead] that makes [NanoRead] act as an applicative,
-/// i.e. the method `liftA2` can be called with a callback, which returns a new
+/// i.e. the method [liftA2] can be called with a callback, which returns a new
 /// [NanoRead] instance containing the values returned by the given callback,
 /// updated as the original [NanoRead] instances updates.
 extension ApplicativeNanoRead<T> on NanoRead<T> {
-  /// Lifts this [NanoRead] with the given callback `lifter` and another
+  /// Lifts this [NanoRead] with the given callback [lifter] and another
   /// [NanoRead] and returns a new [NanoRead] instance as a result.
   NanoRead<U> liftA2<S, U>(U Function(T, S) lifter, NanoRead<S> other) {
     // Create and return an _ApplicativeNanoRead, which handles all logic.
@@ -16,13 +16,13 @@ extension ApplicativeNanoRead<T> on NanoRead<T> {
 
 /// A [NanoRead] instance that handles the applicative logic.
 class _ApplicativeNanoRead<T, S, U> implements NanoRead<U> {
-  /// The first original [NanoRead] to retrieve arguments to `lifter` from.
+  /// The first original [NanoRead] to retrieve arguments to [lifter] from.
   final NanoRead<T> source1;
 
-  /// The second original [NanoRead] to retrieve arguments to `lifter` from.
+  /// The second original [NanoRead] to retrieve arguments to [lifter] from.
   final NanoRead<S> source2;
 
-  /// A function used to call each value from `source1` and `source2` with to
+  /// A function used to call each value from [source1] and [source2] with to
   /// create new values.
   final U Function(T, S) lifter;
 
@@ -30,25 +30,27 @@ class _ApplicativeNanoRead<T, S, U> implements NanoRead<U> {
   /// instance.
   final NanoChannel<U> _channel;
 
-  /// The unsubscribe callback for `source1`.
+  /// The unsubscribe callback for [source1].
   ///
   /// The value is null when this [_ApplicativeNanoRead] has no subscribers.
   void Function()? _unsubscribeSource1;
 
-  /// The unsubscribe callback for `source2`.
+  /// The unsubscribe callback for [source2].
   ///
   /// The value is null when this [_ApplicativeNanoRead] has no subscribers.
   void Function()? _unsubscribeSource2;
 
-  /// The most recently retrieved value from `source1`.
+  /// The most recently retrieved value from [source1].
   late T _source1Value;
 
-  /// The most recently retrieved value from `source2`.
+  /// The most recently retrieved value from [source2].
   late S _source2Value;
 
-  /// The most recently value calculated by `lifter.
+  /// The most recently value calculated by [lifter].
   late U _resultValue;
 
+  /// Creates a new [_ApplicativeNanoRead] that handles the applicative logic
+  /// of [source1] and [source2] using [lifter].
   _ApplicativeNanoRead(
     this.source1,
     this.source2,
@@ -92,9 +94,10 @@ class _ApplicativeNanoRead<T, S, U> implements NanoRead<U> {
     return _resultValue;
   }
 
-  /// Accepts a `source1Value` and `source2Value` and uses them to update
-  /// _source1Value, _source2Value and _resultValue if source1Value differs
-  /// from _source1Value or source2Value differs from _source2Value.
+  /// Accepts a [source1Value] and [source2Value] and uses them to update
+  /// [_source1Value], [_source2Value] and [_resultValue] if [source1Value]
+  /// differs from [_source1Value] or [source2Value] differs from
+  /// [_source2Value].
   void _update(T source1Value, S source2Value) {
     // Check if any of the values have changed.
     if (_source1Value != source1Value || _source2Value != source2Value) {

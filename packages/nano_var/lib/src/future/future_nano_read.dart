@@ -19,13 +19,14 @@ class _FutureNanoRead<T> extends NanoRead<FutureNanoReadStatus<T>> {
   /// A [NanoVar] instance containing the status of the [Future].
   final NanoVar<FutureNanoReadStatus<T>> _status;
 
+  /// Creates a new [_FutureNanoRead] that handles a given [future].
   _FutureNanoRead(Future<T> future)
       : _status = NanoVar(UncompletedNanoReadStatus()) {
     // Call _handleFuture with the given Future.
     _handleFuture(future);
   }
 
-  /// Awaits the given [Future] and updates `_status` accordingly.
+  /// Awaits the given [Future] and updates [_status] accordingly.
   Future<void> _handleFuture(Future<T> future) async {
     try {
       // Await future and store the resulting value.
