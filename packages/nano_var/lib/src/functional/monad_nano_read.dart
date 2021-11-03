@@ -2,11 +2,11 @@ import '../nano_channel.dart';
 import '../nano_read.dart';
 
 /// An extension of [NanoRead] that makes [NanoRead] act as a monad,
-/// i.e. the method `binder` can be called with a callback, which returns a new
+/// i.e. the method [binder] can be called with a callback, which returns a new
 /// [NanoRead] instance containing the values returned by the [NanoRead]
-/// instance most recently returned by `binder`.
+/// instance most recently returned by [binder].
 extension MonadNanoRead<T> on NanoRead<T> {
-  /// Binds this [NanoRead] with the given callback `binder` and returns a new
+  /// Binds this [NanoRead] with the given callback [binder] and returns a new
   /// [NanoRead] instance as a result.
   NanoRead<S> bind<S>(NanoRead<S> Function(T) binder) {
     // Create and return a _MonadNanoRead, which handles all logic.
@@ -16,10 +16,10 @@ extension MonadNanoRead<T> on NanoRead<T> {
 
 /// A [NanoRead] instance that handles the monad logic.
 class _MonadNanoRead<T, S> implements NanoRead<S> {
-  /// The original [NanoRead] to retrieve arguments to `binder` from.
+  /// The original [NanoRead] to retrieve arguments to [binder] from.
   final NanoRead<T> outerSource;
 
-  /// A function used to call each value from `outerSource` with to get a
+  /// A function used to call each value from [outerSource] with to get a
   /// second [NanoRead] instance to finally get values from.
   final NanoRead<S> Function(T) binder;
 
@@ -27,25 +27,27 @@ class _MonadNanoRead<T, S> implements NanoRead<S> {
   /// instance.
   final NanoChannel<S> _channel;
 
-  /// The unsubscribe callback for `outerSource`.
+  /// The unsubscribe callback for [outerSource].
   ///
   /// The value is null when this [_MonadNanoRead] has no subscribers.
   void Function()? _unsubscribeOuterSource;
 
-  /// The unsubscribe callback for `innerSource`.
+  /// The unsubscribe callback for [_innerSource].
   ///
   /// The value is null when this [_MonadNanoRead] has no subscribers.
   void Function()? _unsubscribeInnerSource;
 
-  /// The most recently retrieved value from `outerSource`.
+  /// The most recently retrieved value from [outerSource].
   late T _outerSourceValue;
 
-  /// The most recently returned [NanoRead] instance from `mapper`.
+  /// The most recently returned [NanoRead] instance from [binder].
   late NanoRead<S> _innerSource;
 
-  /// The most recently retrieved value from `_innerSource`.
+  /// The most recently retrieved value from [_innerSource].
   late S _innerSourceValue;
 
+  /// Creates a new [_MonadNanoRead] that handles the monad logic of
+  /// [outerSource] using [binder].
   _MonadNanoRead(
     this.outerSource,
     this.binder,
@@ -99,9 +101,9 @@ class _MonadNanoRead<T, S> implements NanoRead<S> {
     }
   }
 
-  /// Accepts a `outerSourceValue` and uses it to update _outerSourceValue,
-  /// _innerSource and _innerSourceValue if outerSourceValue differs from
-  /// _outerSourceValue.
+  /// Accepts a [outerSourceValue] and uses it to update [_outerSourceValue],
+  /// [_innerSource] and [_innerSourceValue] if [outerSourceValue] differs from
+  /// [_outerSourceValue].
   bool _updateOuter(T outerSourceValue) {
     // Check if outerSourceValue has changed.
     if (_outerSourceValue != outerSourceValue) {
@@ -152,8 +154,8 @@ class _MonadNanoRead<T, S> implements NanoRead<S> {
     }
   }
 
-  /// Accepts a `innerSourceValue` and uses it to update _innerSourceValue if
-  /// `innerSourceValue` differs from _innerSourceValue.
+  /// Accepts an [innerSourceValue] and uses it to update [_innerSourceValue]
+  /// if [innerSourceValue] differs from [_innerSourceValue].
   void _updateInner(S innerSourceValue) {
     // Check if innerSourceValue has changed.
     if (_innerSourceValue != innerSourceValue) {
@@ -192,7 +194,7 @@ class _MonadNanoRead<T, S> implements NanoRead<S> {
     }
   }
 
-  /// Subscribes to _innerSource.
+  /// Subscribes to [_innerSource].
   void _rawSubscribeToInnerSource() {
     // Subscribe to _innerSource and assign the unsubscribe function to
     // _unsubscribeInnerSource.

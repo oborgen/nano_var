@@ -1,4 +1,5 @@
-/// Thrown if `watch` is called after `build` has returned.
+/// Thrown if `watch` is called after [NanoObsWidget.build] or
+/// [NanoObs.builder] has returned.
 class InvalidWatchCallException implements Exception {
   /// Creates an [InvalidWatchCallException].
   const InvalidWatchCallException();
