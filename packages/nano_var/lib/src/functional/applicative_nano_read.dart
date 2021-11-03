@@ -1,10 +1,10 @@
 import '../nano_channel.dart';
 import '../nano_read.dart';
 
-/// An extension of [NanoRead] that makes [NanoRead] act as an applicative,
-/// i.e. the method [liftA2] can be called with a callback, which returns a new
-/// [NanoRead] instance containing the values returned by the given callback,
-/// updated as the original [NanoRead] instances updates.
+/// An extension of [NanoRead] that makes [NanoRead] act as an applicative
+/// functor, i.e. the method [liftA2] can be called with a callback, which
+/// returns a new [NanoRead] instance containing the values returned by the
+/// given callback, updated as the original [NanoRead] instances updates.
 extension ApplicativeNanoRead<T> on NanoRead<T> {
   /// Lifts this [NanoRead] with the given callback [lifter] and another
   /// [NanoRead] and returns a new [NanoRead] instance as a result.
@@ -14,7 +14,7 @@ extension ApplicativeNanoRead<T> on NanoRead<T> {
   }
 }
 
-/// A [NanoRead] instance that handles the applicative logic.
+/// A [NanoRead] instance that handles the applicative functor logic.
 class _ApplicativeNanoRead<T, S, U> implements NanoRead<U> {
   /// The first original [NanoRead] to retrieve arguments to [lifter] from.
   final NanoRead<T> source1;
@@ -49,8 +49,8 @@ class _ApplicativeNanoRead<T, S, U> implements NanoRead<U> {
   /// The most recently value calculated by [lifter].
   late U _resultValue;
 
-  /// Creates a new [_ApplicativeNanoRead] that handles the applicative logic
-  /// of [source1] and [source2] using [lifter].
+  /// Creates a new [_ApplicativeNanoRead] that handles the applicative functor
+  /// logic of [source1] and [source2] using [lifter].
   _ApplicativeNanoRead(
     this.source1,
     this.source2,
