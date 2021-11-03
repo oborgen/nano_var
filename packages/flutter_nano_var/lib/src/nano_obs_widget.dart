@@ -5,14 +5,14 @@ import 'package:nano_var/nano_var.dart';
 /// A widget that can be used to listen to changes to [NanoRead] instances and
 /// will rebuild itself when any change occurs.
 ///
-/// Users have to override the method `build` to use the widget.
+/// Users have to override the method [build] to use the widget.
 abstract class NanoObsWidget extends StatefulWidget {
   /// Creates a [NanoObsWidget] with an optional key.
   const NanoObsWidget({
     Key? key,
   }) : super(key: key);
 
-  /// Builds the widget and provides the function `watch`, which can be used to
+  /// Builds the widget and provides the function [watch], which can be used to
   /// read the values of [NanoRead] instances and subscribe to changes to those
   /// values.
   Widget build(
@@ -21,7 +21,8 @@ abstract class NanoObsWidget extends StatefulWidget {
   );
 
   @override
-  State<StatefulWidget> createState() {
+  State<NanoObsWidget> createState() {
+    // Create and return a _NanoObsWidgetState.
     return _NanoObsWidgetState();
   }
 }
@@ -104,7 +105,7 @@ class _NanoObsWidgetState extends State<NanoObsWidget> {
     return nanoRead.value;
   }
 
-  /// Unsubscribes and remove all subscriptions that are not in `reads`.
+  /// Unsubscribes and remove all subscriptions that are not in [reads].
   void _cleanSubscriptions(Set<NanoRead> reads) {
     // Process each subscription and remove certain subscriptions if necessary.
     subscriptions.removeWhere((nanoRead, unsubscribe) {
