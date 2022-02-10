@@ -4,7 +4,7 @@ description: >-
   A lightweight state management library independent from any dependency
   injection methods.
 
-version: 1.1.0
+version: 1.1.1
 
 repository: https://github.com/oborgen/nano_var
 
@@ -21,3 +21,4 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   uuid: ^3.0.1
+  nano_mock: ^1.0.2

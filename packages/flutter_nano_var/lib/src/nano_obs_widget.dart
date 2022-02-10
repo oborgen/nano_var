@@ -125,9 +125,13 @@ class _NanoObsWidgetState extends State<NanoObsWidget> {
 
   /// Callback for when a change has occured.
   void _onChange<T>(T oldValue, T newValue) {
-    setState(() {
-      // Do nothing.
-      // build handles all the bookkeeping.
-    });
+    // Check if the state is mounted.
+    if (mounted) {
+      // Call setState if the state is mounted.
+      setState(() {
+        // Do nothing.
+        // build handles all the bookkeeping.
+      });
+    }
   }
 }

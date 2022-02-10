@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_nano_var/flutter_nano_var.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nano_mock/nano_mock.dart';
 import 'package:nano_var/nano_var.dart';
 import 'package:uuid/uuid.dart';
 
@@ -59,6 +60,30 @@ final _uuid = Uuid();
 String randomString() {
   // Call v4 to generate a new UUID.
   return _uuid.v4();
+}
+
+class _PostDisposeEmitNanoRead extends NanoRead<String> {
+  final String initialValue;
+  final void Function() unsubscribe;
+
+  NanoReadSubscribeCallback<String>? callback;
+
+  _PostDisposeEmitNanoRead(
+    this.initialValue,
+    this.unsubscribe,
+  );
+
+  @override
+  void Function() subscribe(NanoReadSubscribeCallback<String> callback) {
+    // Store the given callback.
+    this.callback = callback;
+
+    // Return the given unsubscribe function.
+    return unsubscribe;
+  }
+
+  @override
+  String get value => initialValue;
 }
 
 void main() {
@@ -231,6 +256,50 @@ void main() {
       expect(
         () => watch(nanoVar),
         throwsA(isA<InvalidWatchCallException>()),
+      );
+    });
+
+    testWidgets(
+        "does nothing if a NanoRead instance emits a new value after the " +
+            "widget has been disposed", (tester) async {
+      // Generate an initial value.
+      final initialValue = "initialValue-" + randomString();
+
+      // Generate a new value.
+      final newValue = "newValue-" + randomString();
+
+      // Create a mock.
+      final fakeUnsubscribe = NanoMock<void>();
+
+      // Set up the mock to accept no arguments.
+      final verify = fakeUnsubscribe.whenVoid([]);
+
+      // Create a _PostDisposeEmitNanoRead.
+      final nanoRead = _PostDisposeEmitNanoRead(
+        initialValue,
+        () => fakeUnsubscribe([]),
+      );
+
+      // Build a _TextObserverWidget with the _PostDisposeEmitNanoRead
+      // instance.
+      await tester.pumpWidget(
+        _TextObserverWidget(
+          nanoRead: nanoRead,
+        ),
+      );
+
+      // Build a Container, which disposes the NanoObsWidget.
+      await tester.pumpWidget(
+        Container(),
+      );
+
+      // Verify that unsubscribe has been called.
+      verify.called(1);
+
+      // Trigger the callback from the NanoObsWidget anyway.
+      nanoRead.callback!(
+        initialValue,
+        newValue,
       );
     });
   });
