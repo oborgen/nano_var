@@ -13,7 +13,7 @@ environment:
   flutter: ">=2.0.2"
 
 dependencies:
-  nano_var: ^1.1.0
+  nano_var: ^1.1.1
   flutter:
     sdk: flutter
 
