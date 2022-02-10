@@ -1,3 +1,9 @@
+# 1.1.1
+
+* Added a check to _NanoObsWidgetState._onChange ensuring that State.mounted is
+true before calling setState, which avoids an exception that would be thrown
+otherwise.
+
 # 1.1.0
 
 * Added functional methods so NanoRead instances can behave as functors,
